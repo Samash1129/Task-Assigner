@@ -1,19 +1,18 @@
 const express = require("express");
-const bcrypt = require('bcrypt');
-const Users = require("../Models/Users");
+const Users = require("../Models/Tasks");
 const router = express.Router();
 
 //Test API
-router.get('/temp', async (req, res) => {
-    try {
-        const tester = await Users.find();
-        res.json(tester);
-    } catch (err) {
-        res.send({
-            message: "Not Found"
-        })
-    }
-});
+// router.get('/temp', async (req, res) => {
+//     try {
+//         const tester = await Users.find();
+//         res.json(tester);
+//     } catch (err) {
+//         res.send({
+//             message: "Not Found"
+//         })
+//     }
+// });
 
 //POST request for login
 router.post('/login', async (req, res) => {
@@ -58,7 +57,7 @@ router.post('/register', async (req, res) => {
 
     // sample JSON
     // {
-    //     "name": "test1",
+        //     "name": "test1",
     //     "password": "qwerty123",
     //     "contact_number": 123456789,
     //     "gender": "Male",
@@ -79,22 +78,10 @@ router.post('/register', async (req, res) => {
         email: req.body.email,
         roles: req.body.roles
     })
-
+    
     await newUser.save()
 
     res.status(201).send("User Created")
-});
-
-//GET request to show all the active members. (Admin & Super Admin)
-router.get('/admin/show-sers', async (req, res) => {
-    try {
-        const showUser = await Users.find();
-        res.json(showUser);
-    } catch (err) {
-        res.send({
-            message: "Not Found"
-        })
-    }
 });
 
 module.exports = router;

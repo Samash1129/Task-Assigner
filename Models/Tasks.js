@@ -2,31 +2,31 @@ const express = require('express');
 const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
-    Task_Name: {
+    task_name: {
         type: String,
         required: true
     },
-    Description: {
+    description: {
         type: String,
         required: true
     },
-    ERP: {
+    erp: {
         type: Number,
         required: true
     },
-    Start_Date: {
+    start_date: {
         type: Date,
         required: true
     },
-    End_Date: {
+    end_date: {
         type: Date,
         required: true
     },
-    Assigned_To: {
+    assigned_to: {
         type: String,
         required: true
     },
-    Department: {
+    department: {
         type: String,
         required: true
     }

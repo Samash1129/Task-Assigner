@@ -2,37 +2,41 @@ const express = require('express');
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    Name: {
+    name: {
         type: String,
         required: true
     },
-    Contact_Number: {
+    password: {
+        type: String,
+        required: true
+    },
+    contact_number: {
         type: Number,
         required: true
     },
-    Gender: {
+    gender: {
         type: String,
         required: true
     },
-    Age: {
+    age: {
         type: Number
     },
-    ERP: {
+    erp: {
         type: Number,
         required: true,
         unique: true
     },
-    Department: {
+    department: {
         type: String,
         required: true
     },
-    Email: {
+    email: {
         type: String,
         required: true,
         unique: true,
         lowercase: true
     },
-    Roles: {
+    roles: {
         type: String,
         required: true
     }

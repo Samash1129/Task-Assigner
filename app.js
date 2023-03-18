@@ -15,12 +15,12 @@ const app = express();
 
 app.use(express.json());
 
-// const testRoute = require("./Routes/testRoute");
-// app.use("/testRoute", testRoute);
+const userRoute = require("./Routes/user");
+app.use("/user", userRoute);
 
-app.get("/", (req, res) => {
-    res.send("Welcome");
-})
+// app.get("/", (req, res) => {
+//     res.send("Welcome");
+// })
 
 const port = 8000;
 

@@ -85,4 +85,16 @@ router.post('/register', async (req, res) => {
     res.status(201).send("User Created")
 });
 
+//GET API for Admins and Super Admins to view users
+router.get('/admin/show-users', async (req, res) => {
+    try {
+        const showUser = await Users.find();
+        res.json(showUser);
+    } catch (err) {
+        res.send({
+            message: "Not Found"
+        })
+    }
+});
+
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Users = require("../Models/Users");
+const authMiddleware = require('../Middlewares/auth');
 const router = express.Router();
 
 //Test API
@@ -34,7 +35,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).send("Invalid Username or Password")
         }
 
-        const token = jwt.sign({ name: user.name }, process.env.Secret_Key, { expiresIn: '30m' })
+        const token = jwt.sign({ name: user.name, roles: user.roles }, process.env.Secret_Key, { expiresIn: '30m' })
 
         return res.status(200).json({
             name: user.name,
@@ -89,43 +90,15 @@ router.post('/register', async (req, res) => {
     res.status(201).send("User Created")
 });
 
-// Middleware function to check if user is authenticated and authorized
-const authenticate = async (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ message: 'Authentication failed: No token provided' });
-    }
-    jwt.verify(token, secretKey, (error, decoded) => {
-      if (error) {
-        return res.status(401).json({ message: 'Authentication failed: Invalid token' });
-      }
-      req.user = decoded;
-      next();
-    });
-  };
-
 //GET API for Admins and Super Admins to view users
-// router.get('/admin/show-users', async (req, res) => {
-//     try {
-//         const showUser = await Users.find();
-
-//         res.json(showUser);
-//     } catch (err) {
-//         res.send({ message: "Not Found" })
-//     }
-// });
-
-router.get('/admin/show-users', authenticate, async (req, res) => {
+router.get('/getUsers', authMiddleware, async (req, res) => {
     try {
-        const userRole = req.user.role;
-        if (userRole !== 'admin' && userRole !== 'superadmin') {
-          return res.status(403).json({ message: 'Authorization failed: User is not authorized' });
-        }
         const users = await Users.find();
         res.json(users);
-      } catch (error) {
-        return res.status(500).json({ message: 'Error getting user list', error });
-      }
+        // res.json({ message: 'You are authorized to access this resource' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 });
-
 module.exports = router;

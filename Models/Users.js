@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
     roles: {
         type: String,
         required: true
+    },
+    access_token: {
+        type: String,
+        default: null
     }
 })
 

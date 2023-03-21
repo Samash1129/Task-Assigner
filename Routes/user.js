@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Users = require("../Models/Users");
 const authMiddleware = require('../Middlewares/auth');
+const logoutM = require("../Middlewares/auth");
 const router = express.Router();
 
 //Test API
@@ -11,9 +12,7 @@ router.get('/temp', async (req, res) => {
         const tester = await Users.find();
         res.json(tester);
     } catch (err) {
-        res.send({
-            message: "Not Found"
-        })
+        res.send({message: "Not Found"})
     }
 });
 
@@ -35,7 +34,10 @@ router.post('/login', async (req, res) => {
             return res.status(401).send("Invalid Username or Password")
         }
 
-        const token = jwt.sign({ name: user.name, roles: user.roles }, process.env.Secret_Key, { expiresIn: '30m' })
+        const token = jwt.sign({ name: user.name, roles: user.roles }, process.env.Secret_Key, { expiresIn: '1hr' })
+
+        user.access_token = token
+        await user.save()
 
         return res.status(200).json({
             name: user.name,
@@ -92,13 +94,53 @@ router.post('/register', async (req, res) => {
 
 //GET API for Admins and Super Admins to view users
 router.get('/getUsers', authMiddleware, async (req, res) => {
+    // 
+    // May change the style of the users bieng presented when one calls the option of getUsers!!
+    //
     try {
-        const users = await Users.find();
-        res.json(users);
-        // res.json({ message: 'You are authorized to access this resource' });
+        const curr_user = req.user;
+        if (curr_user.roles == "Admin") {
+            const users = await Users.find({ roles: { $ne: curr_user.roles } });
+            res.json(users);
+        }
+
+        if (curr_user.roles == "SuperAdmin") {
+            const users = await Users.find({ roles: { $ne: curr_user.roles } });
+            res.json(users);
+        }
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 });
+
+//POST API for logging out
+// router.post('/logout', logoutM, async (req, res) => {
+//     try {
+//         const user = req.user;
+//         res.send(user.access_token)
+//         user.access_token = null;
+//         await user.save();
+//         res.send('Logged out successfully');
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send('Server Error');
+//     }
+// });
+
+router.post('/logout', logoutM, async (req, res) => {
+    try {
+      req.user.tokens = req.user.tokens.filter((token) => {
+        return token.token !== req.token;
+      });
+  
+      await req.user.save();
+  
+      res.status(200).json({ message: 'Logged out successfully' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
 module.exports = router;

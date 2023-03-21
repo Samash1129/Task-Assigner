@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const Users = require("../Models/Users");
 const router = express.Router();
 
@@ -21,21 +22,24 @@ router.post('/login', async (req, res) => {
         const name = req.body.name
         const password = req.body.password
 
-        const user = await Users.findOne({name})
+        const user = await Users.findOne({ name })
 
-        if(!user) {
+        if (!user) {
             return res.status(401).send("Invalid Username or Password")
         }
 
         const match = await bcrypt.compare(password, user.password)
 
-        if(!match) {
+        if (!match) {
             return res.status(401).send("Invalid Username or Password")
         }
 
+        const token = jwt.sign({ name: user.name }, process.env.Secret_Key, { expiresIn: '30m' })
+
         return res.status(200).json({
             name: user.name,
-            message: "Login Successfull"
+            message: "Login Successfull",
+            Token: token
         })
     } catch (err) {
         console.error(err);
@@ -48,9 +52,9 @@ router.post('/register', async (req, res) => {
     const name = req.body.name
     const password = req.body.password
 
-    const user = await Users.findOne({name})
+    const user = await Users.findOne({ name })
 
-    if(user) {
+    if (user) {
         res.status(400).send("User already Exists")
     }
 
@@ -85,16 +89,43 @@ router.post('/register', async (req, res) => {
     res.status(201).send("User Created")
 });
 
-//GET API for Admins and Super Admins to view users
-router.get('/admin/show-users', async (req, res) => {
-    try {
-        const showUser = await Users.find();
-        res.json(showUser);
-    } catch (err) {
-        res.send({
-            message: "Not Found"
-        })
+// Middleware function to check if user is authenticated and authorized
+const authenticate = async (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: 'Authentication failed: No token provided' });
     }
+    jwt.verify(token, secretKey, (error, decoded) => {
+      if (error) {
+        return res.status(401).json({ message: 'Authentication failed: Invalid token' });
+      }
+      req.user = decoded;
+      next();
+    });
+  };
+
+//GET API for Admins and Super Admins to view users
+// router.get('/admin/show-users', async (req, res) => {
+//     try {
+//         const showUser = await Users.find();
+
+//         res.json(showUser);
+//     } catch (err) {
+//         res.send({ message: "Not Found" })
+//     }
+// });
+
+router.get('/admin/show-users', authenticate, async (req, res) => {
+    try {
+        const userRole = req.user.role;
+        if (userRole !== 'admin' && userRole !== 'superadmin') {
+          return res.status(403).json({ message: 'Authorization failed: User is not authorized' });
+        }
+        const users = await Users.find();
+        res.json(users);
+      } catch (error) {
+        return res.status(500).json({ message: 'Error getting user list', error });
+      }
 });
 
 module.exports = router;

@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
 });
 
 //POST request for register
-router.post('/register', async (req, res) => {
+router.post('/register', authMiddleware, async (req, res) => {
     const name = req.body.name
     const password = req.body.password
 
@@ -61,6 +61,7 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPass = await bcrypt.hash(password, 10)
+
 
     // sample JSON
     // {

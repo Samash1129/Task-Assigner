@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Users = require("../Models/Users");
 const authMiddleware = require('../Middlewares/auth');
-const logoutM = require("../Middlewares/auth");
 const router = express.Router();
 
 //Test API
@@ -34,7 +33,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).send("Invalid Username or Password")
         }
 
-        const token = jwt.sign({ name: user.name, roles: user.roles }, process.env.Secret_Key, { expiresIn: '1hr' })
+        const token = jwt.sign({ name: user.name, roles: user.roles, erp: user.erp }, process.env.Secret_Key, { expiresIn: '1hr' })
 
         user.access_token = token
         await user.save()
@@ -115,31 +114,23 @@ router.get('/getUsers', authMiddleware, async (req, res) => {
 });
 
 //POST API for logging out
-// router.post('/logout', logoutM, async (req, res) => {
-//     try {
-//         const user = req.user;
-//         res.send(user.access_token)
-//         user.access_token = null;
-//         await user.save();
-//         res.send('Logged out successfully');
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server Error');
-//     }
-// });
-
-router.post('/logout', logoutM, async (req, res) => {
+router.post('/logout', async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'You must be logged in' });
+    }
     try {
-      req.user.tokens = req.user.tokens.filter((token) => {
-        return token.token !== req.token;
-      });
-  
-      await req.user.save();
-  
-      res.status(200).json({ message: 'Logged out successfully' });
+      const decodedToken = jwt.verify(token, process.env.Secret_Key);
+      const user = await Users.findOne({ name: decodedToken.name });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      user.access_token = '';
+      await user.save();
+      return res.json({ message: 'You have been logged out' });
     } catch (err) {
-      console.error(err.message);
-      res.status(500).json({ message: 'Server error' });
+      return res.status(401).json({ error: 'You must be logged in' });
     }
   });
   

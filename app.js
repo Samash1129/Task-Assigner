@@ -18,6 +18,9 @@ app.use(express.json());
 const userRoute = require('./Routes/user');
 app.use("/user", userRoute);
 
+const taskRoute = require('./Routes/tasks');
+app.use("/tasks", taskRoute);
+
 app.get("/", (req, res) => {
     res.send("Welcome");
 })

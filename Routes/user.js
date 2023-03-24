@@ -18,10 +18,10 @@ router.get('/temp', async (req, res) => {
 //POST request for login
 router.post('/login', async (req, res) => {
     try {
-        const name = req.body.name
+        const erp = req.body.erp
         const password = req.body.password
 
-        const user = await Users.findOne({ name })
+        const user = await Users.findOne({ erp })
 
         if (!user) {
             return res.status(401).send("Invalid Username or Password")
@@ -40,6 +40,7 @@ router.post('/login', async (req, res) => {
 
         return res.status(200).json({
             name: user.name,
+            erp: user.erp,
             message: "Login Successfull",
             Token: token
         })
@@ -99,6 +100,7 @@ router.get('/getUsers', authMiddleware, async (req, res) => {
     //
     try {
         const curr_user = req.user;
+
         if (curr_user.roles == "Admin") {
             const users = await Users.find({ roles: { $ne: curr_user.roles } });
             res.json(users);
@@ -123,7 +125,7 @@ router.post('/logout', async (req, res) => {
     }
     try {
       const decodedToken = jwt.verify(token, process.env.Secret_Key);
-      const user = await Users.findOne({ name: decodedToken.name });
+      const user = await Users.findOne({ erp: decodedToken.erp });
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }

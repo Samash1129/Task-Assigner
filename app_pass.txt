@@ -1,0 +1,5 @@
+Sign in to your Google account and go to the Google Account Security page.
+Under the "Signing in to Google" section, click on "App passwords".
+If prompted, verify your identity by entering your password again.
+Select the app and device you want to generate the app password for, and click "Generate".
+Copy the generated password and use it in the pass field of the auth object in your Node.js code.

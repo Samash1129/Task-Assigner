@@ -15,11 +15,11 @@ const app = express();
 
 app.use(express.json());
 
-const userRoute = require("./Routes/user");
+const userRoute = require('./Routes/user');
 app.use("/user", userRoute);
 
-const taskRoute = require("./Models/Tasks")
-app.use("/task", taskRoute)
+const taskRoute = require('./Routes/tasks');
+app.use("/tasks", taskRoute);
 
 app.get("/", (req, res) => {
     res.send("Welcome");

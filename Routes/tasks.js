@@ -102,16 +102,41 @@ router.delete('/deleteTask/:id', authMiddleware, async (req, res) => {
         req.user = decoded;
 
         const task = await Tasks.findOneAndDelete({ _id: req.params.id, erp: req.user.erp });
-
-        // const task = await Tasks.findOne({ task_name: req.params.task_name });
-        // const task_id = task._id;
-        // res.send(task_id);
         
         if (!task) {
             return res.status(404).send('Task not found');
         }
 
         res.status(200).send('Task removed');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+//PATCH API to update a task
+router.patch('/updateTask/:id', authMiddleware, async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token, process.env.Secret_Key);
+        req.user = decoded;
+
+        const task = await Tasks.findOneAndUpdate({ _id: req.params.id, erp: req.user.erp });
+        
+        if (!task) {
+            return res.status(404).send('Task not found');
+        }
+
+        task.task_name = req.body.task_name || task.task_name
+        task.description = req.body.description || task.description
+        task.end_date = req.body.end_date || task.end_date
+        task.assigned_to = req.body.assigned_to || task.assigned_to
+        task.department = req.body.department || task.department
+
+        await task.save()
+
+        res.status(200).send('Task updated successfully');
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');

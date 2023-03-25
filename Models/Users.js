@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         type: Number
     },
     erp: {
-        type: Number,
+        type: String,
         required: true,
         unique: true
     },

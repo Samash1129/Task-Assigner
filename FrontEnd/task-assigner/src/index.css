@@ -1,0 +1,27 @@
+* {
+    padding: 0;
+    margin: 0;
+    /* background-color: #8ecae6; */
+}
+
+.login-form {
+    border: 2px solid black;
+    max-width: 30vw;
+    margin: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 26vh;
+    border-radius: 25px;
+    background-color: #219ebc;
+    box-shadow: 5px 5px 10px #023047;
+}
+
+.login-form:hover {
+    box-shadow: 10px 10px 20px #023047;
+}
+
+.login-btn {
+    margin: auto;
+}

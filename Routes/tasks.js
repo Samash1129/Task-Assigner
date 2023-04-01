@@ -42,7 +42,7 @@ router.post('/addTask', authMiddleware, async (req, res) => {
             service: 'gmail',
             auth: {
               user: 'mashoudntaha@gmail.com',
-              pass: 'qyqkcfapfntzqwqq'
+              pass: 'pkfbteyeydlsepnk'
             }
           });
           

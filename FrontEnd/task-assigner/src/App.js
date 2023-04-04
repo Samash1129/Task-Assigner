@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Login from './Login';
-import './index.css';
 import NavBar from "./NavBar";
+import Menu from "./Menu";
+import './index.css';
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
       <>
         <NavBar />
         <Login />
+        <Menu />
       </>
     )
   }

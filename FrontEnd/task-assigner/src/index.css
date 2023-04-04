@@ -1,7 +1,31 @@
 * {
     padding: 0;
     margin: 0;
-    /* background-color: #8ecae6; */
+}
+
+body {
+    background-image: linear-gradient(#212529, #8ecae6);
+    height: 100vh;
+}
+
+.Nav-container {
+    margin-left: 30px;
+}
+
+.dropdown {
+    position: absolute;
+    right: 65px;
+    top: 13px;
+}
+
+.dropdown-menu[data-bs-popper] {
+    /* top: 100%; */
+    right: 0;
+    /* margin-top: var(--bs-dropdown-spacer); */
+}
+
+.logo {
+    margin-right: 10px;
 }
 
 .login-form {
@@ -24,4 +48,24 @@
 
 .login-btn {
     margin: auto;
+}
+
+.Row {
+    display: contents;
+}
+
+.Col {
+    max-width: 17%;
+    background-color: #12688226;
+    height: 92vh;
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: #8ecae6;
+    --bs-nav-pills-link-active-color: #9b2226;
+}
+
+.nav {
+    --bs-nav-link-color: #0168ff;
+    --bs-nav-link-hover-color: #b4ccef;
 }

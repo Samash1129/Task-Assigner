@@ -3,6 +3,18 @@
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+    color: #050505;
+    display: block;
+    padding: 0px 0px;
+    margin: 2px 0px;
+}
+
+a :hover{
+    color: #b4ccef;
+}
+
 body {
     background-image: linear-gradient(#212529, #8ecae6);
     height: 100vh;
@@ -48,6 +60,7 @@ body {
 
 .login-btn {
     margin: auto;
+    text-decoration: none;
 }
 
 .Row {
@@ -55,7 +68,7 @@ body {
 }
 
 .Col {
-    max-width: 17%;
+    max-width: 12%;
     background-color: #12688226;
     height: 92vh;
 }
@@ -65,7 +78,9 @@ body {
     --bs-nav-pills-link-active-color: #9b2226;
 }
 
-.nav {
-    --bs-nav-link-color: #0168ff;
-    --bs-nav-link-hover-color: #b4ccef;
+.nav-link {
+    display: block;
+    padding: 10px 0px;
+    padding-left: 11px;
+    color: #050505;
 }

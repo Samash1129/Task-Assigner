@@ -1,27 +1,80 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Button, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import axios from "./api/axios";
 import './index.css';
 
-class Login extends Component {
-    render() {
-        return (
-            <Form className="login-form">
-                <Form.Group className="mb-3" controlId="formBasicEmail" style={{ backgroundColor: '#219ebc' }}>
-                    <Form.Label style={{ backgroundColor: '#219ebc' }}>ERP/Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter your erp/username" />
-                </Form.Group>
+const LOGIN_URL = '/login'
 
-                <Form.Group className="mb-3" controlId="formBasicPassword" style={{ backgroundColor: '#219ebc' }}>
-                    <Form.Label style={{ backgroundColor: '#219ebc' }}>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
-                </Form.Group>
+export default function Login() {
+    const [erp, setERP] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-                <Button variant="primary" type="submit" className="login-btn">
-                    Login
-                </Button>
-            </Form>
-        )
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(LOGIN_URL, {
+                erp,
+                password,
+            });
+
+            // Login successful
+            console.log(response.data);
+            localStorage.setItem('token', response.data.Token); // set token in localStorage
+            setERP('')
+            setPassword('')
+            navigate('/dashboard/getUsers')
+        } catch (err) {
+            // Login failed
+            console.error(err);
+            setError('Invalid username or password');
+        }
     }
-}
 
-export default Login;
+    const handleERPChange = (e) => {
+        setERP(e.target.value);
+        setError('');
+    }
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        setError('');
+    }
+
+    return (
+        <>
+            <section>
+                <Form className="login-form" onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="formBasicEmail" style={{ backgroundColor: '#219ebc' }}>
+                        <Form.Label style={{ backgroundColor: '#219ebc' }}>ERP/Username</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter your erp/username"
+                            autoComplete="off"
+                            required
+                            value={erp}
+                            onChange={handleERPChange}
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicPassword" style={{ backgroundColor: '#219ebc' }}>
+                        <Form.Label style={{ backgroundColor: '#219ebc' }}>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            required
+                            value={password}
+                            onChange={handlePasswordChange}
+                        />
+                    </Form.Group>
+                    {error && <div className="error">{error}</div>}
+                    <Button variant="primary" type="submit" className="login-btn">
+                        Login
+                    </Button>
+                </Form>
+            </section>
+        </>
+    )
+}

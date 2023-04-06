@@ -19,15 +19,18 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }))
 
-const userRoute = require('./Routes/user');
-app.use("/user", userRoute);
+const dashboardRoute = require('./Routes/dashboard');
+app.use("/dashboard", dashboardRoute);
 
 const taskRoute = require('./Routes/tasks');
 app.use("/tasks", taskRoute);
 
-app.get("/", (req, res) => {
-    res.send("Welcome");
-})
+const loginRoute = require('./Routes/login');
+app.use("/", loginRoute);
+
+// app.get("/", (req, res) => {
+//     res.send("Welcome");
+// })
 
 const port = 8000;
 

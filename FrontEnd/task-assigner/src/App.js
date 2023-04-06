@@ -1,19 +1,20 @@
-import React, { Component } from "react";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import Login from './Login';
 import NavBar from "./NavBar";
-import Menu from "./Menu";
+import Dashboard from "./Dashboard";
 import './index.css';
 
-class App extends Component {
-  render() {
-    return (
-      <>
-        <NavBar />
-        <Login />
-        <Menu />
-      </>
-    )
-  }
+function App() {
+  return (
+    <>
+      <NavBar />
+      <Routes>
+        <Route path="/dashboard/getUsers" element={<Dashboard />} />
+        <Route exact path="/" element={<Login />} />
+      </Routes>
+    </>
+  )
 }
 
 export default App;

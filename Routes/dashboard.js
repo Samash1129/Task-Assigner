@@ -67,7 +67,7 @@ router.get('/getUsers', authMiddleware, async (req, res) => {
         const curr_user = req.user;
 
         if (curr_user.roles == "Admin") {
-            const users = await Users.find({ roles: { $ne: curr_user.roles } });
+            const users = await Users.find({ roles: { $nin: ["Admin", "SuperAdmin"] } });
             res.json(users);
         }
 

@@ -24,18 +24,6 @@ body {
     margin-left: 30px;
 }
 
-.dropdown {
-    position: absolute;
-    right: 65px;
-    top: 13px;
-}
-
-.dropdown-menu[data-bs-popper] {
-    /* top: 100%; */
-    right: 0;
-    /* margin-top: var(--bs-dropdown-spacer); */
-}
-
 .logo {
     margin-right: 10px;
 }
@@ -83,4 +71,28 @@ body {
     padding: 10px 0px;
     padding-left: 11px;
     color: #050505;
+}
+
+
+.list {
+    border: 2pc solid black;
+    border-width: 9px;
+    position: absolute;
+    left: 200px;
+    top: 65px;
+    width: 85%;
+    height: 90%;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    /* background-color: transparent; */
 }

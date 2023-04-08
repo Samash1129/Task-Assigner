@@ -7,7 +7,7 @@ function NavBar() {
         <>
             <Navbar bg="dark" variant="dark">
                 <Container className='Nav-container'>
-                    <Navbar.Brand href="#home">
+                    <Navbar.Brand>
                         <img
                             alt=""
                             src="assignment.png"

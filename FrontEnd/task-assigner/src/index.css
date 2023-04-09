@@ -11,7 +11,7 @@ a {
     margin: 2px 0px;
 }
 
-a :hover{
+a :hover {
     color: #b4ccef;
 }
 
@@ -95,4 +95,30 @@ body {
     margin-bottom: 5px;
     border-radius: 5px;
     /* background-color: transparent; */
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-inner {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.adduserform {
+    width: 98%;
+    position: absolute;
+    left: 10px;
+    top: 20px;
 }

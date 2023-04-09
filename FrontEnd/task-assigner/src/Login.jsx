@@ -51,7 +51,6 @@ export default function Login() {
                     <Form.Group className="mb-3" controlId="formBasicEmail" style={{ backgroundColor: '#219ebc' }}>
                         <Form.Label style={{ backgroundColor: '#219ebc' }}>ERP/Username</Form.Label>
                         <Form.Control
-                            type="text"
                             placeholder="Enter your erp/username"
                             autoComplete="off"
                             required

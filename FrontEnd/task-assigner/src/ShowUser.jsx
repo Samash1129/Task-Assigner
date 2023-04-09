@@ -7,7 +7,7 @@ export default function ShowUsers({ users }) {
     const [selectedUser, setSelectedUser] = useState(null)
 
     const showSelectedUser = (user) => {
-        setSelectedUser(users)
+        setSelectedUser(user)
     }
 
     const closeSelectedUser = () => {
@@ -19,7 +19,7 @@ export default function ShowUsers({ users }) {
             <div className="list">
                 <ListGroup>
                     {users.map(user => (
-                        <ListGroup.Item key={user._id} onClick={showSelectedUser}>
+                        <ListGroup.Item key={user._id} onClick={() => showSelectedUser(user)}>
                             <div>
                                 <span>Name: {user.name}</span>
                             </div>

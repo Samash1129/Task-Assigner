@@ -117,8 +117,42 @@ body {
 }
 
 .adduserform {
-    width: 98%;
+    width: 95%;
     position: absolute;
-    left: 10px;
-    top: 20px;
+    left: 30px;
+    top: 30px;
+}
+
+.password {
+    display: flex;
+}
+
+.password-field,
+.department-radio {
+    width: 84%;
+    margin-right: 26px;
+}
+
+.gender {
+    display: flex;
+}
+
+.gender-type {
+    margin-right: 20px;
+}
+
+.end {
+    display: flex;
+}
+
+.switch {
+    display: flex;
+    align-items: center;
+}
+
+.add-user {
+    display: block;
+    position: absolute;
+    right: 0px;
+    bottom: -10px;
 }

@@ -1,9 +1,11 @@
+/* eslint-disable no-lone-blocks */
 import React, { useEffect, useState } from 'react';
 import { Col, Nav, Row, Tab } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import axios from './api/axios';
 import ShowUsers from './ShowUser';
 import AddUser from './AddUser';
+import AddTask from './AddTask';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -20,7 +22,7 @@ export default function Dashboard() {
             const response = await axios.get('/dashboard/getUsers', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token'),
-                },
+                }
             });
             console.log(response.data);
             setUsers(response.data);
@@ -29,6 +31,35 @@ export default function Dashboard() {
         }
     };
 
+    
+    const handleTabSelect = (key) => {
+        setActiveTab(key);
+        localStorage.setItem('activeTab', key);
+        // Update the URL
+        switch (key) {
+            case 'first':
+                navigate('/dashboard/getUsers');
+                break;
+                case 'second':
+                    navigate('/dashboard/register');
+                break;
+            case 'third':
+                navigate('/dashboard/addTask');
+                break;
+            case 'fourth':
+                navigate('/dashboard/accountSettings');
+                break;
+            default:
+                break;
+        }
+    };
+    
+    useEffect(() => {
+        if (users.length === 0) {
+            setActiveTab('first');
+        }
+    }, [users]);
+    
     //For Logout
     const handleLogout = async () => {
         try {
@@ -48,17 +79,6 @@ export default function Dashboard() {
         }
     };
 
-    const handleTabSelect = (key) => {
-        setActiveTab(key);
-        localStorage.setItem('activeTab', key);
-    };
-
-    useEffect(() => {
-        if (users.length === 0) {
-            setActiveTab('first');
-        }
-    }, [users]);
-
     return (
         <>
             <Tab.Container id="left-tabs-example" activeKey={activeTab} onSelect={handleTabSelect}>
@@ -74,10 +94,13 @@ export default function Dashboard() {
                                 <Nav.Link eventKey="second">Add a User</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link eventKey="third">Account Settings</Nav.Link>
+                                <Nav.Link eventKey="third">Add Task</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="fourth">Account Settings</Nav.Link>
                             </Nav.Item>
                             <Nav.Item className="logout">
-                                <Nav.Link eventKey="fourth" onClick={handleLogout}>
+                                <Nav.Link eventKey="fifth" onClick={handleLogout}>
                                     Logout
                                 </Nav.Link>
                             </Nav.Item>
@@ -91,8 +114,11 @@ export default function Dashboard() {
                             <Tab.Pane eventKey="second">
                                 <AddUser />
                             </Tab.Pane>
-                            <Tab.Pane eventKey="third">Account Settings</Tab.Pane>
-                            <Tab.Pane eventKey="fourth">Logout</Tab.Pane>
+                            <Tab.Pane eventKey="third">
+                                <AddTask />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="fourth">Account Settings</Tab.Pane>
+                            <Tab.Pane eventKey="fifth">Logout</Tab.Pane>
                         </Tab.Content>
                     </Col>
                 </Row>

@@ -81,6 +81,16 @@ router.get('/getUsers', authMiddleware, async (req, res) => {
     }
 });
 
+//GET API to filter users/admins according to the department
+router.get('/addTask/', authMiddleware, async (req, res) => {
+    try {
+        const users = await Users.find({ department: req.query.department })
+        res.json(users)
+    } catch (error) {
+        console.error(error.message)
+    }
+})
+
 //POST API for logging out
 router.post('/logout', async (req, res) => {
     const authHeader = req.headers['authorization'];

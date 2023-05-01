@@ -29,7 +29,21 @@ const taskSchema = new mongoose.Schema({
     department: {
         type: String,
         required: true
-    }
+    },
+    files: [{
+        filename: {
+            type: String,
+            required: false
+        },
+        contentType: {
+            type: String,
+            required: false
+        },
+        file: {
+            type: Buffer,
+            required: false
+        }
+    }]
 })
 
 const Task = mongoose.model('Task', taskSchema)

@@ -4,6 +4,7 @@ import Login from './Login';
 import NavBar from "./NavBar";
 import Dashboard from "./Dashboard";
 import './index.css';
+// import AddTask from "./AddTask";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
 
         <Route exact path="/" element={<Login />} />
       </Routes>
+      {/* <AddTask /> */}
     </>
   )
 }

@@ -95,6 +95,11 @@ body {
     margin-bottom: 5px;
     border-radius: 5px;
     /* background-color: transparent; */
+    width: 95%;
+    position: relative;
+    left: 30px;
+    top: 30px;
+    bottom: 15px;
 }
 
 .popup {
@@ -116,11 +121,13 @@ body {
     text-align: center;
 }
 
-.adduserform {
+.adduserform,
+.addtaskform {
     width: 95%;
     position: absolute;
     left: 30px;
     top: 30px;
+    bottom: 20px;
 }
 
 .password {
@@ -155,4 +162,13 @@ body {
     position: absolute;
     right: 0px;
     bottom: -10px;
+}
+
+.datefield {
+    margin-right: 30%;
+}
+
+.add-task {
+    position: absolute;
+    right: 0px;
 }

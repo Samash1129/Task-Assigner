@@ -23,7 +23,7 @@ const dashboardRoute = require('./Routes/dashboard');
 app.use("/dashboard", dashboardRoute);
 
 const taskRoute = require('./Routes/tasks');
-app.use("/tasks", taskRoute);
+app.use("/dashboard/tasks", taskRoute);
 
 const loginRoute = require('./Routes/login');
 app.use("/", loginRoute);

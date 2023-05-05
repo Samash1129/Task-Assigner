@@ -43,7 +43,11 @@ const taskSchema = new mongoose.Schema({
             type: Buffer,
             required: false
         }
-    }]
+    }],
+    status: {
+        type: String,
+        default: 'Not Completed'
+    }
 })
 
 const Task = mongoose.model('Task', taskSchema)

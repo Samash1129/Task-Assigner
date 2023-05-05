@@ -33,7 +33,7 @@ export default function AddTask() {
 
         try {
             // post data to backend API
-            const response = await axios.post('/tasks/addTask', formData, {
+            const response = await axios.post('/dashboard/tasks/addTask', formData, {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token'),
                     'Content-Type': 'multipart/form-data'

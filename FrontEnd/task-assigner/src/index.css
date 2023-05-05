@@ -85,12 +85,20 @@ body {
     overflow-y: auto;
 }
 
+.for-checkbox {
+    display: flex;
+}
+
+#checkbox {
+    margin-right: 30px;
+}
+
 .list-group-item {
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    padding-left: 50px;
+    padding-left: 20px;
     padding-right: 50px;
     margin-bottom: 5px;
     border-radius: 5px;
@@ -171,4 +179,10 @@ body {
 .add-task {
     position: absolute;
     right: 0px;
+}
+
+.pagination {
+    position: absolute;
+    bottom: 0px;
+    right: 40px;
 }

@@ -1,5 +1,4 @@
 const express = require("express");
-// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const multer = require("multer");
@@ -27,13 +26,15 @@ router.post('/addTask', authMiddleware, upload.array('files'), async (req, res) 
     try {
         const decoded = jwt.verify(token, process.env.Secret_Key);
         req.user = decoded;
-        
+
         const curr_date = new Date()
+        const formattedDate = curr_date.toLocaleDateString('en-GB')
+
         const newTask = new Tasks({
             task_name: req.body.task_name,
             description: req.body.description,
             erp: req.user.erp,
-            start_date: curr_date,
+            start_date: formattedDate,
             end_date: req.body.end_date,
             assigned_to: req.body.assigned_to,
             department: req.body.department,
@@ -45,7 +46,7 @@ router.post('/addTask', authMiddleware, upload.array('files'), async (req, res) 
                 };
             })
         })
-        
+
         await newTask.save()
         // res.send(newTask)
 
@@ -105,7 +106,7 @@ router.get('/getMyTasks', async (req, res) => {
 });
 
 //GET API to get all the task assigned by the user(Admin/Super Admin)
-router.get('/getAssignedTasks', async (req, res) => {
+router.get('/getAssignedTasks', authMiddleware, async (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
     try {
@@ -114,9 +115,19 @@ router.get('/getAssignedTasks', async (req, res) => {
 
         const erp = req.user.erp
         // const users = await Users.findOne({ name }, 'name')
-        const tasks = await Tasks.find({ erp: erp })
+        const tasks = await Tasks.find({ erp: erp }, { _id: 0, task_name: 1, assigned_to: 1, end_date: 1, status: 1 })
 
-        res.send(tasks)
+        const formattedTasks = tasks.map(task => {
+            const formattedDate = new Date(task.end_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            return { 
+                task_name: task.task_name, 
+                assigned_to: task.assigned_to, 
+                end_date: formattedDate, 
+                status: task.status 
+            }
+        });
+
+        res.send(formattedTasks);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

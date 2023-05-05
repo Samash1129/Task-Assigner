@@ -31,6 +31,7 @@ router.post('/login', async (req, res) => {
             name: user.name,
             erp: user.erp,
             message: "Login Successfull",
+            roles: user.roles,
             Token: token
         })
     } catch (err) {

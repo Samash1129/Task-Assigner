@@ -24,13 +24,23 @@ export default function Login() {
             // Login successful
             console.log(response.data);
             localStorage.setItem('token', response.data.Token); // set token in localStorage
+            localStorage.setItem('roles', response.data.roles);
             setERP('')
             setPassword('')
-            navigate('/dashboard/getUsers')
+            
+            const Role = localStorage.getItem('roles')
+            {
+                Role === 'SuperAdmin' || Role === 'Admin' ? (
+                    navigate('/dashboard/getUsers')
+                ) :
+                    navigate('/dashboard/tasks/getMyTasks')
+            }
         } catch (err) {
             // Login failed
             console.error(err);
             setError('Invalid username or password');
+            setERP('')
+            setPassword('')
         }
     }
 

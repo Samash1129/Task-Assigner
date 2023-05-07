@@ -14,9 +14,12 @@ function App() {
 
         <Route path="/dashboard/getUsers" element={<Dashboard />} />
         <Route path="/dashboard/register" element={<Dashboard />} />
-        <Route path="/dashboard/tasks" element={<Dashboard />} />
         <Route path="/dashboard/tasks/addTask" element={<Dashboard />} />
+        <Route path="/dashboard/tasks" element={<Dashboard />} />
         <Route path="/dashboard/tasks/getAssignedTasks" element={<Dashboard />} />
+
+        <Route path="/dashboard/tasks/getMyTasks" element={<Dashboard />} />
+
         <Route path="/dashboard/accountSettings" element={<Dashboard />} />
       </Routes>
     </>

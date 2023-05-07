@@ -96,9 +96,19 @@ router.get('/getMyTasks', async (req, res) => {
 
         const name = req.user.name
         // const users = await Users.findOne({ name }, 'name')
-        const tasks = await Tasks.find({ assigned_to: name })
+        const tasks = await Tasks.find({ assigned_to: name }, { _id: 0, task_name: 1, erp: 1, end_date: 1, status: 1 })
 
-        res.send(tasks)
+        const formattedMyTasks = tasks.map(task => {
+            const formattedDate = new Date(task.end_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            return { 
+                task_name: task.task_name, 
+                assigned_by: task.erp, 
+                end_date: formattedDate, 
+                status: task.status 
+            }
+        });
+
+        res.send(formattedMyTasks)
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

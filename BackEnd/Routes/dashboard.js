@@ -60,13 +60,13 @@ router.post('/register', authMiddleware, async (req, res) => {
 
 //GET API for Admins and Super Admins to view users
 router.get('/getUsers', authMiddleware, async (req, res) => {
-    
+
     // May change the style of the users bieng presented when one calls the option of getUsers!!
-    
+
     try {
         const curr_user = req.user;
         if (curr_user.roles == "Admin") {
-            const users = await Users.find({ roles: { $ne: "SuperAdmin" }, erp: { $ne: curr_user.erp }});
+            const users = await Users.find({ roles: { $ne: "SuperAdmin" }, erp: { $ne: curr_user.erp } });
             res.json(users);
         }
 

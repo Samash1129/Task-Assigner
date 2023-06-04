@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const { format } = require('date-fns');
 const multer = require("multer");
 const Tasks = require("../Models/Tasks");
 const Users = require("../Models/Users")
@@ -28,7 +29,7 @@ router.post('/addTask', authMiddleware, upload.array('files'), async (req, res) 
         req.user = decoded;
 
         const curr_date = new Date()
-        const formattedDate = curr_date.toLocaleDateString('en-GB')
+        const formattedDate = curr_date.toISOString()
 
         const newTask = new Tasks({
             task_name: req.body.task_name,
@@ -47,14 +48,16 @@ router.post('/addTask', authMiddleware, upload.array('files'), async (req, res) 
             })
         })
 
+        console.log('File URLs:', newTask.files.map(file => file.url));
+        
         await newTask.save()
-        // res.send(newTask)
+        // res.send('hello')
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: 'mashoudntaha@gmail.com',
-                pass: 'pkfbteyeydlsepnk'
+                pass: 'cxcrfdlppsqxzszf'
             }
         });
 
@@ -79,10 +82,12 @@ router.post('/addTask', authMiddleware, upload.array('files'), async (req, res) 
             }
         });
 
-        res.status(201).send('Task Added');
+        console.log('API Response:', newTask);
+
+        res.status(201).send(newTask);
     } catch (err) {
         console.error(err)
-        res.status(500).send('Server Error');
+        res.status(500).send(err);
     }
 });
 
@@ -96,15 +101,16 @@ router.get('/getMyTasks', async (req, res) => {
 
         const name = req.user.name
         // const users = await Users.findOne({ name }, 'name')
-        const tasks = await Tasks.find({ assigned_to: name }, { _id: 0, task_name: 1, erp: 1, end_date: 1, status: 1 })
+        const tasks = await Tasks.find({ assigned_to: name }, { _id: 1, task_name: 1, erp: 1, end_date: 1, status: 1 })
 
         const formattedMyTasks = tasks.map(task => {
             const formattedDate = new Date(task.end_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-            return { 
-                task_name: task.task_name, 
-                assigned_by: task.erp, 
-                end_date: formattedDate, 
-                status: task.status 
+            return {
+                id: task._id,
+                task_name: task.task_name,
+                assigned_by: task.erp,
+                end_date: formattedDate,
+                status: task.status
             }
         });
 
@@ -125,15 +131,16 @@ router.get('/getAssignedTasks', authMiddleware, async (req, res) => {
 
         const erp = req.user.erp
         // const users = await Users.findOne({ name }, 'name')
-        const tasks = await Tasks.find({ erp: erp }, { _id: 0, task_name: 1, assigned_to: 1, end_date: 1, status: 1 })
+        const tasks = await Tasks.find({ erp: erp }, { _id: 1, task_name: 1, assigned_to: 1, end_date: 1, status: 1 })
 
         const formattedTasks = tasks.map(task => {
             const formattedDate = new Date(task.end_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-            return { 
-                task_name: task.task_name, 
-                assigned_to: task.assigned_to, 
-                end_date: formattedDate, 
-                status: task.status 
+            return {
+                id: task._id,
+                task_name: task.task_name,
+                assigned_to: task.assigned_to,
+                end_date: formattedDate,
+                status: task.status
             }
         });
 
@@ -143,6 +150,43 @@ router.get('/getAssignedTasks', authMiddleware, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+//GET API to show a selected task - (Admin/SuperAdmin)
+router.get('/getAssignedTasks/:id', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token, process.env.Secret_Key);
+        req.user = decoded;
+
+        const task_detail = await Tasks.findOne({ _id: req.params.id }, { _id: 1, description: 1, erp: 1, start_date: 1, department: 1, files: 1});
+
+        // console.log(req.params.id)
+
+        res.status(200).send(task_detail);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+//GET API to show a selected task - User
+router.get('/getMyTasks/:id', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token, process.env.Secret_Key);
+        req.user = decoded;
+
+        const task_detail = await Tasks.findOne({ _id: req.params.id })
+
+        res.status(200).send(task_detail)
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+})
 
 //DELETE API to delete a task
 router.delete('/deleteTask/:id', authMiddleware, async (req, res) => {

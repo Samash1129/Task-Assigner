@@ -46,7 +46,8 @@ const taskSchema = new mongoose.Schema({
     }],
     status: {
         type: String,
-        default: 'Not Completed'
+        default: 'Not Completed',
+        required: false
     }
 })
 

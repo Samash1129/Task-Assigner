@@ -32,6 +32,7 @@ export default function Dashboard() {
             });
             console.log(response.data);
             setUsers(response.data);
+
         } catch (err) {
             console.error(err.response.data.error);
         }
@@ -133,14 +134,11 @@ export default function Dashboard() {
     //For Logout
     const handleLogout = async () => {
         try {
-            const response = await axios.post(
-                '/dashboard/logout',
-                {},
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token'),
-                    },
-                }
+            const response = await axios.post('/dashboard/logout', {}, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            }
             );
             console.log(response.data.message);
             navigate('/');
@@ -176,7 +174,7 @@ export default function Dashboard() {
                                             Show Tasks
                                         </Nav.Link>
                                     </Nav.Item>
-{/* 
+                                    {/* 
                                     <Nav.Item>
                                         <Nav.Link eventKey="fifth">Account Settings</Nav.Link>
                                     </Nav.Item> */}

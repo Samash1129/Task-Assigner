@@ -27,14 +27,10 @@ export default function Login() {
             localStorage.setItem('roles', response.data.roles);
             setERP('')
             setPassword('')
-            
+
             const Role = localStorage.getItem('roles')
-            {
-                Role === 'SuperAdmin' || Role === 'Admin' ? (
-                    navigate('/dashboard/getUsers')
-                ) :
-                    navigate('/dashboard/tasks/getMyTasks')
-            }
+            // eslint-disable-next-line
+            { Role === 'SuperAdmin' || Role === 'Admin' ? navigate('/dashboard/getUsers') : navigate('/dashboard/tasks/getMyTasks') }
         } catch (err) {
             // Login failed
             console.error(err);

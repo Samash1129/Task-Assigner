@@ -181,8 +181,24 @@ body {
     right: 0px;
 }
 
-.pagination {
-    position: absolute;
-    bottom: 0px;
-    right: 40px;
+.accordian {
+    margin: 10px;
+}
+
+.accordianheader {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 50px;
+}
+
+.accordian .accordion-button::after {
+    display: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
 }

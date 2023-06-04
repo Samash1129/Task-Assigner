@@ -25,6 +25,7 @@ export default function AddTask() {
         }
     };
 
+    console.log(localStorage.getItem('token'))
     const add_task = async (event) => {
         event.preventDefault();
 
@@ -90,7 +91,6 @@ export default function AddTask() {
                         <Form.Label>Upload Files</Form.Label>
                         <Form.Control type="file" multiple name="files" />
                     </Form.Group>
-
 
                     <Button variant="primary" type="submit" className='add-task'>Add Task</Button>
                 </Form>
